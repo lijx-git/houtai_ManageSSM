@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lacey.kind.dao.StudentsDao">
+    <resultMap id="allStudents" type="Students">
+        <id column="s_id" property="sid"/>
+        <result column="s_name" property="sname" />
+        <result column="gender" property="gender"/>
+        <result column="address" property="address"/>
+        <result column="birthday" property="birthday"/>
+    </resultMap>
+    <select id="queryAll" resultMap="allStudents" >
+        SELECT * FROM students
+    </select>
+    <select id="findStuById" resultType="Students" parameterType="long">
+        SELECT * FROM students WHERE s_id=#{sid}
+    </select>
+    <delete id="deleteStuById" parameterType="long">
+        DELETE FROM students WHERE s_id=#{sid}
+    </delete>
+    <insert id="addStudent" parameterType="Students" useGeneratedKeys="true" keyProperty="sid">
+        insert into students(sname,gender,birthday,address) values(#{sname},#{gender},#{birthday},#{address})
+    </insert>
+    <select id="findStu" parameterType="String" resultMap="allStudents">
+     SELECT * FROM students WHERE 1=1
+
+         <if test="key=='sid'">
+          AND   s_id=#{val}
+
+         </if>
+         <if test="key=='sname'">
+            AND  sname=#{val}
+         </if>
+         <if test="key=='address'">
+            AND address=#{val}
+         </if>
+
+    </select>
+
+</mapper>

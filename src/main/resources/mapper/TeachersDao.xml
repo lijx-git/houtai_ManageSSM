@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lacey.kind.dao.TeachersDao">
+    <resultMap id="teachersList" type="Teachers">
+        <id column="t_id" property="tid"/>
+        <result column="tname" property="tname"/>
+        <result column="gender" property="gender"/>
+        <result column="id_number" property="IDNumber"/>
+        <result column="birthday" property="birthday"/>
+        <result column="address" property="address"/>
+    </resultMap>
+    <select id="findAllTeachers" resultMap="teachersList">
+        SELECT * from teachers ;
+    </select>
+    <!--设置是否使用JDBC的getGenereatedKeys方法获取主键并赋值到keyProperty设置的领域模型属性中-->
+    <insert id="addTeachers" parameterType="com.lacey.kind.entity.Teachers" keyProperty="tid" useGeneratedKeys="true">
+        INSERT INTO teachers(tname,gender,birthday,id_number,address) VALUE (#{tname},#{gender},#{birthday},#{IDNumber},#{address})
+    </insert>
+    <delete id="deleteTea" parameterType="Long" >
+        DELETE FROM teachers WHERE t_id=#{tid}
+    </delete>
+    <select id="findTeaByElement" resultMap="teachersList">
+        SELECT * FROM teachers WHERE 1=1
+        <if test="key=='tid'">
+         AND   t_id=#{val}
+        </if>
+        <if test="key=='tname'">
+         AND   tname=#{val}
+        </if>
+        <if test="key=='IDNumber'">
+           AND id_num=#{val}
+        </if>
+    </select>
+    <select id="findTeaByTid" parameterType="long" resultType="Teachers">
+        SELECT * FROM teachers WHERE t_id=#{tid}
+    </select>
+    <update id="updateTeaByTid" parameterType="com.lacey.kind.entity.Teachers" >
+  UPDATE teachers SET tname=#{tname},gender=#{gender},birthday=#{birthday},id_number=#{IDNumber},address=#{address} WHERE t_id=#{tid}
+    </update>
+</mapper>
